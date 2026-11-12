@@ -4,11 +4,9 @@ import {
   getOfficeName,
   listAvatars,
   saveAvatars,
-  seedAvatars,
   setOfficeName,
   type AvatarWrite,
 } from '@/lib/office/db'
-import { dummyRoster } from '@/lib/office/dummy-roster'
 import { assertLocalWriteRequest } from '@/lib/local-guard'
 import type { Agent, AgentDivision } from '@/types/hermes'
 import { getRemoteHeadStatuses } from '@/lib/hermes/remote-health'
@@ -27,9 +25,7 @@ export const dynamic = 'force-dynamic'
  */
 export async function GET() {
   try {
-    // First run: populate the dummy roster so the building is not empty. Idempotent
-    // — it only fires when the table has no rows at all.
-    seedAvatars(dummyRoster())
+    // Los avatares de demostración no se generan automáticamente.
     // Agent remote yang head-nya LIVE ikut menjadi roster ruangan: scene
     // mensintesis avatar untuk roster yang belum punya baris DB (masuk lewat
     // pintu utama). Head yang DOWN tidak dimasukkan — avatarnya keluar sendiri.
