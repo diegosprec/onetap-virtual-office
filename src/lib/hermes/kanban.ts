@@ -1011,6 +1011,15 @@ export async function listProfiles(): Promise<string[]> {
   } catch {
     // no profiles/ directory yet
   }
+  // En instalaciones Docker separadas, los perfiles no están montados
+  // localmente. Reutilizar el CLI oficial como fuente de verdad.
+  const assignees = await listAssignees().catch(() => [])
+  for (const agent of assignees) {
+    if (agent.onDisk && !out.includes(agent.name)) {
+      out.push(agent.name)
+    }
+  }
+
   return out.sort()
 }
 
