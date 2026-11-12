@@ -9,6 +9,7 @@ import {
   listAssignees,
   listProfiles,
   listTasks,
+  profileDescription,
   profileModel,
   purgeTasks,
   removeA2aPeer,
@@ -83,6 +84,11 @@ export async function GET() {
         profiles.includes(name) ? (await profileModel(name)).model : null,
       ),
     )
+    const descriptions = await Promise.all(
+      roster.map((name) =>
+        profiles.includes(name) ? profileDescription(name) : Promise.resolve(null),
+      ),
+    )
     // role/division/soul/domains dari listAgents (baca SOUL.md + fallback keyword).
     const agentMeta = new Map(agents.map((a) => [a.name, a]))
     const served = await listServedAgents().catch(() => [])
@@ -132,6 +138,7 @@ export async function GET() {
         inOffice: inOffice.has(name),
         /** The profile's default model, when it has one. */
         model: models[i],
+        description: descriptions[i],
         /** Role + divisi (dari SOUL.md, fallback keyword nama). */
         role: agentMeta.get(name)?.role ?? null,
         division: agentMeta.get(name)?.division ?? null,

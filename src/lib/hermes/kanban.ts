@@ -507,6 +507,23 @@ async function kanbanConfig<T>(key: string): Promise<T> {
 /* --------------------------------------------------------- agent (profile) -- */
 
 /**
+ * Read the profile description already registered in Hermes.
+ * Does not modify SOUL.md, config or profile metadata.
+ */
+export async function profileDescription(name: string): Promise<string | null> {
+  try {
+    const { stdout } = await run(
+      HERMES_BIN,
+      ['profile', 'describe', name],
+      { env: cleanEnv(), timeout: TIMEOUT_MS, maxBuffer: 1024 * 1024 },
+    )
+    return stdout.trim() || null
+  } catch {
+    return null
+  }
+}
+
+/**
  * The model a profile runs by default.
  *
  * This is the model a worker is spawned with when its task carries no override

@@ -34,6 +34,7 @@ type Row = {
   reason: string | null
   /** The profile's default model, when it has one. */
   model?: string | null
+  description?: string | null
   /** Role dari route agents GET; null/undefined bila backend lama. */
   role?: AgentRole | string | null
   /** Divisi dari route agents GET; null/undefined bila backend lama. */
@@ -442,6 +443,15 @@ export default function AgentSpawnPanel({
                 {!r.profile && <span className="vp-tag-warn">tanpa profil</span>}
               </b>
               <i>{r.total} tugas</i>
+              {r.description && (
+                <p
+                  className="text-xs text-slate-400 leading-relaxed"
+                  title={r.description}
+                  style={{ overflowWrap: 'anywhere' }}
+                >
+                  {r.description}
+                </p>
+              )}
               {badges(r)}
               {limits(r)}
             </div>
